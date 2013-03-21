@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.rwthaachen.mspconstraintgeneration;
 
 import java.util.HashSet;
@@ -13,7 +9,7 @@ import org.jgrapht.graph.SimpleGraph;
 
 /**
  *
- * @author florian
+ * @author Florian Dahms<dahms@or.rwth-aachen.de>
  */
 public class MSPConstraintGeneratorTest extends TestCase {
     

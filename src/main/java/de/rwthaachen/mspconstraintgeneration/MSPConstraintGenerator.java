@@ -5,7 +5,7 @@ import org.jgrapht.Graph;
 
 /**
  *
- * @author florian
+ * @author Florian Dahms<dahms@or.rwth-aachen.de>
  */
 public class MSPConstraintGenerator {
 
