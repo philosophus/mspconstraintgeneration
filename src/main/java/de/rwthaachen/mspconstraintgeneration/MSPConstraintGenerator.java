@@ -64,8 +64,8 @@ public class MSPConstraintGenerator<A, B> {
         return result;
     }
 
-    public List<Set<B>> setUpWorkingSet() {
-        List<Set<B>> working = new LinkedList();
+    public Queue<Set<B>> setUpWorkingSet() {
+        Queue<Set<B>> working = new LinkedList();
 
         for (A a : matchFrom) {
             working.add(gamma(a));
@@ -85,11 +85,30 @@ public class MSPConstraintGenerator<A, B> {
     }
 
     public Set< Set<B>> generateMSPConstraintSets() {
-        List<Set<B>> working = setUpWorkingSet();
+        Queue<Set<B>> working = setUpWorkingSet();
         Set<Set<B>> result = new HashSet(working);
         Map<B, Set<Set<B>>> containedIn = new HashMap();
 
-        for (Set<B> group : result) {
+        for (Set<B> newSet : result) {
+            addContained(containedIn, newSet);
+        }
+        
+        while(!working.isEmpty()) {
+            Set<B> current = working.remove();
+            Set<Set<B>> possiblePartners = new HashSet();
+            for (B b : current) {
+                assert(containedIn.containsKey(b));
+                possiblePartners.addAll(containedIn.get(b));
+            }
+            
+            for (Set<B> possiblePartner : possiblePartners) {
+                Set<B> newSet = new HashSet(current);
+                newSet.addAll(possiblePartner);
+                if (!result.contains(newSet)) {
+                    result.add(newSet);
+                    working.add(newSet);
+                }
+            }
         }
 
         return result;
