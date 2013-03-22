@@ -6,9 +6,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import junit.framework.TestCase;
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleGraph;
 
 /**
  *
@@ -111,7 +108,7 @@ public class MSPConstraintGeneratorTest extends TestCase {
         subset3.add("c");
         expResult.add(subset3);
         
-        Set result = generator.setUpWorkingSet();
+        Set result = new HashSet(generator.setUpWorkingSet());
         assertEquals(expResult, result);
     }
     

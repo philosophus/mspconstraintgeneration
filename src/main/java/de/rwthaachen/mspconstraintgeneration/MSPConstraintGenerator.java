@@ -1,10 +1,7 @@
 package de.rwthaachen.mspconstraintgeneration;
 
 import de.rwthaachen.mspconstraintgeneration.utils.Utils;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  *
@@ -67,8 +64,8 @@ public class MSPConstraintGenerator<A, B> {
         return result;
     }
 
-    public Set< Set<B>> setUpWorkingSet() {
-        Set<Set<B>> working = new HashSet();
+    public List<Set<B>> setUpWorkingSet() {
+        List<Set<B>> working = new LinkedList();
 
         for (A a : matchFrom) {
             working.add(gamma(a));
@@ -76,11 +73,11 @@ public class MSPConstraintGenerator<A, B> {
 
         return working;
     }
-
+    
     public Set< Set<B>> generateMSPConstraintSets() {
-        Set<Set<B>> working = setUpWorkingSet();
+        List<Set<B>> working = setUpWorkingSet();
         Set<Set<B>> result = new HashSet();
-
+        
 
         return result;
     }
