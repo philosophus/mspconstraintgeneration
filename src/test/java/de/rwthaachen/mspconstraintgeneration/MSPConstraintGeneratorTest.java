@@ -16,6 +16,10 @@ import org.jgrapht.graph.SimpleGraph;
  */
 public class MSPConstraintGeneratorTest extends TestCase {
 
+    private Set<String> A1 = new HashSet();
+    private Set<String> B1 = new HashSet();
+    private Map<String, Set<String>> edges1 = new HashMap();
+
     public MSPConstraintGeneratorTest(String testName) {
         super(testName);
     }
@@ -23,6 +27,27 @@ public class MSPConstraintGeneratorTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+
+        A1.add("1");
+        A1.add("2");
+        A1.add("3");
+        A1.add("4");
+        A1.add("5");
+        A1.add("6");
+        B1.add("a");
+        B1.add("b");
+        B1.add("c");
+
+        Utils.multiMapInsert(edges1, "1", "a");
+        Utils.multiMapInsert(edges1, "2", "a");
+        Utils.multiMapInsert(edges1, "1", "b");
+        Utils.multiMapInsert(edges1, "2", "b");
+        Utils.multiMapInsert(edges1, "3", "b");
+        Utils.multiMapInsert(edges1, "4", "b");
+        Utils.multiMapInsert(edges1, "5", "b");
+        Utils.multiMapInsert(edges1, "6", "b");
+        Utils.multiMapInsert(edges1, "5", "c");
+        Utils.multiMapInsert(edges1, "6", "c");
     }
 
     @Override
@@ -31,33 +56,8 @@ public class MSPConstraintGeneratorTest extends TestCase {
     }
 
     public void testGammainv() {
-        Set<String> A = new HashSet();
-        Set<String> B = new HashSet();
+        MSPConstraintGenerator<String, String> generator = new MSPConstraintGenerator<String, String>(A1, B1, edges1);
 
-        A.add("1");
-        A.add("2");
-        A.add("3");
-        A.add("4");
-        A.add("5");
-        A.add("6");
-        B.add("a");
-        B.add("b");
-        B.add("c");
-
-        Map<String, Set<String>> edges = new HashMap();
-        Utils.multiMapInsert(edges, "1", "a");
-        Utils.multiMapInsert(edges, "2", "a");
-        Utils.multiMapInsert(edges, "1", "b");
-        Utils.multiMapInsert(edges, "2", "b");
-        Utils.multiMapInsert(edges, "3", "b");
-        Utils.multiMapInsert(edges, "4", "b");
-        Utils.multiMapInsert(edges, "5", "b");
-        Utils.multiMapInsert(edges, "6", "b");
-        Utils.multiMapInsert(edges, "5", "c");
-        Utils.multiMapInsert(edges, "6", "c");
-        
-        MSPConstraintGenerator<String, String> generator = new MSPConstraintGenerator<String, String>(A,B,edges);
-        
         Set expResult1 = new HashSet();
         expResult1.add("3");
         expResult1.add("4");
@@ -65,7 +65,7 @@ public class MSPConstraintGeneratorTest extends TestCase {
         testSet1.add("b");
         Set result = generator.gammainv(testSet1);
         assertEquals(expResult1, result);
-        
+
         Set expResult2 = new HashSet();
         expResult2.add("1");
         expResult2.add("2");
@@ -75,13 +75,30 @@ public class MSPConstraintGeneratorTest extends TestCase {
         testSet2.add("a");
         testSet2.add("b");
         result = generator.gammainv(testSet2);
-        assertEquals(expResult2, result);        
+        assertEquals(expResult2, result);
+    }
+    
+    public void testGammaInvEmptyEdges() {
+        Map<String, Set<String>> edges = new HashMap();
+        MSPConstraintGenerator<String, String> generator = new MSPConstraintGenerator<String, String>(A1, B1, edges);
+        
+        Set expResult = new HashSet();
+        Set testSet1 = new HashSet();
+        testSet1.add("b");
+        Set result = generator.gammainv(testSet1);
+        assertEquals(expResult, result);
+
+        Set testSet2 = new HashSet();
+        testSet2.add("a");
+        testSet2.add("b");
+        result = generator.gammainv(testSet2);
+        assertEquals(expResult, result);        
     }
 
     /**
      * Test of generateMSPConstraints method, of class MSPConstraintGenerator.
      */
-    public void testGenerateMSPConstraints() {
+    public void testGenerateMSPConstraintSets() {
         Set<String> A = new HashSet();
         Set<String> B = new HashSet();
 
