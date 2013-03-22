@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import org.jgrapht.Graph;
 
 /**
  *
@@ -39,16 +38,20 @@ public class MSPConstraintGenerator<A, B> {
     }
 
     public Set<B> gamma(A a) {
-        return edges1.get(a);
+        if (edges1.containsKey(a)) {
+            assert (edges1.get(a) != null);
+            return edges1.get(a);
+        }
+        return new HashSet<B>();
     }
 
     public Set<A> gammainv(Set<B> bSet) {
-        assert(bSet != null);
-        
+        assert (bSet != null);
+
         Set<A> temp = new HashSet<A>();
         for (B b : bSet) {
             if (edges2.containsKey(b)) {
-                assert(edges2.get(b) != null);
+                assert (edges2.get(b) != null);
                 temp.addAll(edges2.get(b));
             }
         }
@@ -64,17 +67,21 @@ public class MSPConstraintGenerator<A, B> {
         return result;
     }
 
-    public Set< Set<A>> generateMSPConstraintSets() {
+    public Set< Set<B>> setUpWorkingSet() {
+        Set<Set<B>> working = new HashSet();
 
-        return null;
+        for (A a : matchFrom) {
+            working.add(gamma(a));
+        }
+
+        return working;
     }
 
-    public static <V, E> Set< Set<V>> generateMSPConstraints(Graph<V, E> graph, Set<V> matchFrom) {
+    public Set< Set<B>> generateMSPConstraintSets() {
+        Set<Set<B>> working = setUpWorkingSet();
+        Set<Set<B>> result = new HashSet();
 
 
-
-        System.out.println(graph.toString());
-
-        return null;
+        return result;
     }
 }

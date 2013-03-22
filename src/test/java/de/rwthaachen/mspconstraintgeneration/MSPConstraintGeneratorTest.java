@@ -95,42 +95,28 @@ public class MSPConstraintGeneratorTest extends TestCase {
         assertEquals(expResult, result);        
     }
 
-    /**
-     * Test of generateMSPConstraints method, of class MSPConstraintGenerator.
-     */
+    public void testSetUpWorkingSet() {
+        MSPConstraintGenerator<String, String> generator = new MSPConstraintGenerator<String, String>(A1, B1, edges1);
+
+        Set expResult = new HashSet();
+        Set subset1 = new HashSet();
+        subset1.add("a");
+        subset1.add("b");
+        expResult.add(subset1);
+        Set subset2 = new HashSet();
+        subset2.add("b");
+        expResult.add(subset2);
+        Set subset3 = new HashSet();
+        subset3.add("b");
+        subset3.add("c");
+        expResult.add(subset3);
+        
+        Set result = generator.setUpWorkingSet();
+        assertEquals(expResult, result);
+    }
+    
     public void testGenerateMSPConstraintSets() {
-        Set<String> A = new HashSet();
-        Set<String> B = new HashSet();
-
-        A.add("1");
-        A.add("2");
-        A.add("3");
-        A.add("4");
-        A.add("5");
-        A.add("6");
-        B.add("a");
-        B.add("b");
-        B.add("c");
-        Graph<String, DefaultEdge> graph = new SimpleGraph<String, DefaultEdge>(DefaultEdge.class);
-        for (String v : A) {
-            graph.addVertex(v);
-        }
-        for (String v : B) {
-            graph.addVertex(v);
-        }
-
-        graph.addEdge("1", "a");
-        graph.addEdge("2", "a");
-        graph.addEdge("1", "b");
-        graph.addEdge("2", "b");
-        graph.addEdge("3", "b");
-        graph.addEdge("4", "b");
-        graph.addEdge("5", "b");
-        graph.addEdge("6", "b");
-        graph.addEdge("5", "c");
-        graph.addEdge("6", "c");
-
-        System.out.println("generateMSPConstraints");
+        MSPConstraintGenerator<String, String> generator = new MSPConstraintGenerator<String, String>(A1, B1, edges1);
         Set expResult = new HashSet();
         Set subset1 = new HashSet();
         subset1.add("a");
@@ -155,7 +141,7 @@ public class MSPConstraintGeneratorTest extends TestCase {
         subset6.add("c");
         expResult.add(subset6);
 
-        Set result = MSPConstraintGenerator.generateMSPConstraints(graph, A);
+        Set result = generator.generateMSPConstraintSets();
         assertEquals(expResult, result);
     }
 }
