@@ -14,6 +14,19 @@ public class MSPConstraintGenerator<A, B> {
     private Map<A, Set<B>> edges1;
     private Map<B, Set<A>> edges2;
 
+    private void setUpEdges2() {
+        // for every edge from A to B there shall be an edge from B to A
+        edges2 = new HashMap<B, Set<A>>();
+        for (A a : matchFrom) {
+            if (edges1.containsKey(a)) {
+                assert (edges1.get(a) != null);
+                for (B b : edges1.get(a)) {
+                    Utils.multiMapInsert(edges2, b, a);
+                }
+            }
+        }
+    }
+
     public MSPConstraintGenerator(Set<A> matchFrom, Set<B> matchTo, Map<A, Set<B>> edges) {
         assert (matchFrom != null);
         assert (matchTo != null);
@@ -23,16 +36,7 @@ public class MSPConstraintGenerator<A, B> {
         this.matchFrom = matchFrom;
         this.matchTo = matchTo;
 
-        // for every edge from A to B there shall be an edge from B to A
-        edges2 = new HashMap<B, Set<A>>();
-        for (A a : matchFrom) {
-            if (edges.containsKey(a)) {
-                assert (edges.get(a) != null);
-                for (B b : edges.get(a)) {
-                    Utils.multiMapInsert(edges2, b, a);
-                }
-            }
-        }
+        setUpEdges2();
     }
 
     public Set<B> gamma(A a) {
@@ -94,17 +98,17 @@ public class MSPConstraintGenerator<A, B> {
         for (Set<B> newSet : result) {
             addContained(containedIn, newSet);
         }
-        
-        while(!working.isEmpty()) {
+
+        while (!working.isEmpty()) {
             Set<B> current = working.remove();
-            
+
             // collect all sets the current one could possibly be joined with
             Set<Set<B>> possiblePartners = new HashSet();
             for (B b : current) {
-                assert(containedIn.containsKey(b));
+                assert (containedIn.containsKey(b));
                 possiblePartners.addAll(containedIn.get(b));
             }
-            
+
             // add all joined sets which are actually new
             for (Set<B> possiblePartner : possiblePartners) {
                 Set<B> newSet = new HashSet(current);
