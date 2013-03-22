@@ -23,6 +23,7 @@ public class MSPConstraintGenerator<A, B> {
         this.matchFrom = matchFrom;
         this.matchTo = matchTo;
 
+        // for every edge from A to B there shall be an edge from B to A
         edges2 = new HashMap<B, Set<A>>();
         for (A a : matchFrom) {
             if (edges.containsKey(a)) {
@@ -45,6 +46,7 @@ public class MSPConstraintGenerator<A, B> {
     public Set<A> gammainv(Set<B> bSet) {
         assert (bSet != null);
 
+        // collect all the edges an element from bSet connects to
         Set<A> temp = new HashSet<A>();
         for (B b : bSet) {
             if (edges2.containsKey(b)) {
@@ -52,8 +54,8 @@ public class MSPConstraintGenerator<A, B> {
                 temp.addAll(edges2.get(b));
             }
         }
-        System.out.println(temp.toString());
 
+        // only keep a's whose neighbours are all in bSet
         Set<A> result = new HashSet<A>();
         for (A a : temp) {
             if (bSet.containsAll(edges1.get(a))) {
@@ -95,12 +97,15 @@ public class MSPConstraintGenerator<A, B> {
         
         while(!working.isEmpty()) {
             Set<B> current = working.remove();
+            
+            // collect all sets the current one could possibly be joined with
             Set<Set<B>> possiblePartners = new HashSet();
             for (B b : current) {
                 assert(containedIn.containsKey(b));
                 possiblePartners.addAll(containedIn.get(b));
             }
             
+            // add all joined sets which are actually new
             for (Set<B> possiblePartner : possiblePartners) {
                 Set<B> newSet = new HashSet(current);
                 newSet.addAll(possiblePartner);
