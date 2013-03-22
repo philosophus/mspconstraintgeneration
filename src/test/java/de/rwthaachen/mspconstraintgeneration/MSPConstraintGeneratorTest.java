@@ -74,11 +74,11 @@ public class MSPConstraintGeneratorTest extends TestCase {
         result = generator.gammainv(testSet2);
         assertEquals(expResult2, result);
     }
-    
+
     public void testGammaInvEmptyEdges() {
         Map<String, Set<String>> edges = new HashMap();
         MSPConstraintGenerator<String, String> generator = new MSPConstraintGenerator<String, String>(A1, B1, edges);
-        
+
         Set expResult = new HashSet();
         Set testSet1 = new HashSet();
         testSet1.add("b");
@@ -89,7 +89,7 @@ public class MSPConstraintGeneratorTest extends TestCase {
         testSet2.add("a");
         testSet2.add("b");
         result = generator.gammainv(testSet2);
-        assertEquals(expResult, result);        
+        assertEquals(expResult, result);
     }
 
     public void testSetUpWorkingSet() {
@@ -107,36 +107,59 @@ public class MSPConstraintGeneratorTest extends TestCase {
         subset3.add("b");
         subset3.add("c");
         expResult.add(subset3);
-        
+
         Set result = new HashSet(generator.setUpWorkingSet());
         assertEquals(expResult, result);
     }
-    
+
+    public void testAddContained() {
+        MSPConstraintGenerator<String, String> generator = new MSPConstraintGenerator<String, String>(A1, B1, edges1);
+        
+        Map<Integer, Set<Set<Integer>>> containedIn = new HashMap();
+        Set<Integer> newSet = new HashSet();
+        newSet.add(1);
+        newSet.add(2);
+        
+        boolean result = MSPConstraintGenerator.addContained(containedIn, newSet);      
+        assertEquals(true, result);
+        
+        Set<Set<Integer>> Set2 = new HashSet();
+        Set2.add(newSet);
+        assertEquals(Set2, containedIn.get(2));
+        
+        result = MSPConstraintGenerator.addContained(containedIn, newSet);
+        assertEquals(false, result);
+        
+        Set<Integer> newSet2 = new HashSet();
+        newSet2.add(2);
+        newSet2.add(3);
+        result = MSPConstraintGenerator.addContained(containedIn, newSet2);
+        assertEquals(true, result);
+        
+        Set2.add(newSet2);
+        assertEquals(Set2, containedIn.get(2));
+        
+    }
+
     public void testGenerateMSPConstraintSets() {
         MSPConstraintGenerator<String, String> generator = new MSPConstraintGenerator<String, String>(A1, B1, edges1);
         Set expResult = new HashSet();
         Set subset1 = new HashSet();
-        subset1.add("a");
+        subset1.add("b");
         expResult.add(subset1);
         Set subset2 = new HashSet();
+        subset2.add("a");
         subset2.add("b");
         expResult.add(subset2);
         Set subset3 = new HashSet();
+        subset3.add("b");
         subset3.add("c");
         expResult.add(subset3);
         Set subset4 = new HashSet();
         subset4.add("a");
         subset4.add("b");
+        subset4.add("c");
         expResult.add(subset4);
-        Set subset5 = new HashSet();
-        subset5.add("b");
-        subset5.add("c");
-        expResult.add(subset5);
-        Set subset6 = new HashSet();
-        subset6.add("a");
-        subset6.add("b");
-        subset6.add("c");
-        expResult.add(subset6);
 
         Set result = generator.generateMSPConstraintSets();
         assertEquals(expResult, result);

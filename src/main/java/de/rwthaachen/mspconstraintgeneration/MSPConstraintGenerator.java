@@ -73,11 +73,24 @@ public class MSPConstraintGenerator<A, B> {
 
         return working;
     }
-    
+
+    public static <B> boolean addContained(Map<B, Set<Set<B>>> containedIn, Set<B> newSet) {
+        boolean result = false;
+        for (B b : newSet) {
+            if (Utils.multiMapInsert(containedIn, b, newSet)) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
     public Set< Set<B>> generateMSPConstraintSets() {
         List<Set<B>> working = setUpWorkingSet();
-        Set<Set<B>> result = new HashSet();
-        
+        Set<Set<B>> result = new HashSet(working);
+        Map<B, Set<Set<B>>> containedIn = new HashMap();
+
+        for (Set<B> group : result) {
+        }
 
         return result;
     }
